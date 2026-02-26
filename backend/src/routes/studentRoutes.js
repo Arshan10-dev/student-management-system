@@ -15,7 +15,7 @@ router.get("/", getAllStudents);
 router.put("/:id", updateStudent);
 router.delete("/:id", deleteStudent);
 
-// ⭐ Features
+// Features
 router.get("/pending/list", pendingAmountList);
 router.get("/paid/list", totalAmountPaidList);
 

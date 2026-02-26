@@ -1,6 +1,6 @@
 import Student from "../models/studentModel.js";
 
-// ➕ Add Student
+// Add Student
 export const addStudent = async (req, res) => {
   try {
     const student = new Student(req.body);
@@ -11,7 +11,7 @@ export const addStudent = async (req, res) => {
   }
 };
 
-// 📄 Get All Students
+// Get All Students
 export const getAllStudents = async (req, res) => {
   try {
     const students = await Student.find();
@@ -21,7 +21,7 @@ export const getAllStudents = async (req, res) => {
   }
 };
 
-// ✏️ Update Student
+// Update Student
 export const updateStudent = async (req, res) => {
   try {
     const student = await Student.findByIdAndUpdate(
@@ -35,7 +35,7 @@ export const updateStudent = async (req, res) => {
   }
 };
 
-// ❌ Delete Student
+// Delete Student
 export const deleteStudent = async (req, res) => {
   try {
     await Student.findByIdAndDelete(req.params.id);
@@ -45,7 +45,7 @@ export const deleteStudent = async (req, res) => {
   }
 };
 
-// ⭐ Pending Amount List
+// Pending Amount List
 export const pendingAmountList = async (req, res) => {
   try {
     const pendingStudents = await Student.find({ pendingAmount: { $gt: 0 } });
@@ -55,7 +55,7 @@ export const pendingAmountList = async (req, res) => {
   }
 };
 
-// ⭐ Total Amount Paid List
+// Total Amount Paid List
 export const totalAmountPaidList = async (req, res) => {
   try {
     const paidStudents = await Student.find(
