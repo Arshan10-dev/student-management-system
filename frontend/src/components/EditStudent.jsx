@@ -26,7 +26,7 @@ function EditStudent({ refreshStudents, editStudent, closeForm }) {
 
     try {
       await axios.put(
-        `http://localhost:3001/api/students/${editStudent._id}`,
+        `${import.meta.env.VITE_API_URL}/api/students/${editStudent._id}`,
         {
           ...form,
           pendingAmount: pending,

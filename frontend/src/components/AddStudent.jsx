@@ -33,7 +33,7 @@ function AddStudent({ refreshStudents }) {
 
   try {
     await axios.post(
-      "http://localhost:3001/api/students",
+      `${import.meta.env.VITE_API_URL}/api/students`,
       {
         ...form,
         pendingAmount: pending,

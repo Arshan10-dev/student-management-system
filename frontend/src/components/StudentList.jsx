@@ -11,7 +11,6 @@ function StudentList() {
     (sum, s) => sum + Number(s.paidAmount || 0),
     0
   );
-
   const [showForm, setShowForm] = useState(false);
   const [editStudent, setEditStudent] = useState(null);
   const [feeFilter, setFeeFilter] = useState("all");
@@ -27,7 +26,8 @@ function StudentList() {
   const fetchStudents = async () => {
 
     try {
-      const res = await axios.get("http://localhost:3001/api/students");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`
+);
       console.log("API DATA:", res.data);
       setStudents(res.data);
     } catch (err) {
@@ -37,7 +37,7 @@ function StudentList() {
 
   const deleteStudent = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/students/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/students/${id}`);
       fetchStudents();
     } catch (err) {
       console.log(err);
