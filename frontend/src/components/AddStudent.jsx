@@ -33,7 +33,7 @@ function AddStudent({ refreshStudents }) {
 
   try {
     await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/students`,
+      `https://student-management-system-1-1j2r.onrender.com/api/students`,
       {
         ...form,
         pendingAmount: pending,

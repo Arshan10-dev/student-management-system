@@ -26,7 +26,7 @@ function StudentList() {
   const fetchStudents = async () => {
 
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/students`
+      const res = await axios.get("https://student-management-system-1-1j2r.onrender.com/api/students"
 );
       console.log("API DATA:", res.data);
       setStudents(res.data);
@@ -37,7 +37,7 @@ function StudentList() {
 
   const deleteStudent = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/students/${id}`);
+      await axios.delete(`https://student-management-system-1-1j2r.onrender.com/api/students/${id}`);
       fetchStudents();
     } catch (err) {
       console.log(err);
