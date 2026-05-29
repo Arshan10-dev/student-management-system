@@ -98,9 +98,8 @@ function StudentList() {
   };
 
   return (
-    <div className="p-5">
+    <div className="max-w-[1700px] mx-auto p-5">
 
-      {/* Add Student Button */}
       <button
         onClick={() => {
           if (!isAdmin) {
@@ -115,6 +114,7 @@ function StudentList() {
       >
         Add Student
       </button>
+
       {isAdmin && (
         <button
           onClick={() => {
@@ -127,16 +127,18 @@ function StudentList() {
           Logout
         </button>
       )}
+
       <input
         type="text"
         placeholder="Search by Roll No..."
         value={searchRoll}
         onChange={(e) => setSearchRoll(e.target.value)}
-        className="input input-bordered w-full max-w-xs mb-3"
+        className="input input-bordered w-[320px]"
       />
+
       <button
         onClick={() => setShowFilter(!showFilter)}
-        className="btn btn-sm btn-secondary mb-2 ml-2"
+        className="btn btn-secondary"
       >
         Filter
       </button>
