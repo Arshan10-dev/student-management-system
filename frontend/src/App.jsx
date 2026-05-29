@@ -8,7 +8,6 @@ function App() {
       <h1 className="text-3xl font-bold text-center mb-6">
         Student Management System
       </h1>
-    <button className="btn btn-primary">Test Button</button>
 
       <StudentList />
     </div>

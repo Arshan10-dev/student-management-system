@@ -122,7 +122,7 @@ function StudentList() {
             setIsAdmin(false);
             toast.success("Logged out");
           }}
-          className="btn btn-error ml-2"
+          className="btn btn-error ml-3 self-center"
         >
           Logout
         </button>
@@ -239,7 +239,7 @@ function StudentList() {
 
                         deleteStudent(s._id);
                       }}
-                      className="btn btn-sm btn-error"
+                      className="btn btn-error"
                     >
                       Delete
                     </button>
