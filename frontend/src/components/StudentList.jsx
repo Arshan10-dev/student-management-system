@@ -16,6 +16,9 @@ function StudentList() {
   const [feeFilter, setFeeFilter] = useState("all");
   const [showFilter, setShowFilter] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const [showTotal, setShowTotal] = useState(false);
   const [login, setLogin] = useState({ username: "", password: "" });
 
@@ -27,7 +30,7 @@ function StudentList() {
 
     try {
       const res = await axios.get("https://student-management-system-1-1j2r.onrender.com/api/students"
-);
+      );
       console.log("API DATA:", res.data);
       setStudents(res.data);
     } catch (err) {
@@ -46,6 +49,12 @@ function StudentList() {
 
   useEffect(() => {
     fetchStudents();
+
+    const admin = localStorage.getItem("admin");
+
+    if (admin === "true") {
+      setIsAdmin(true);
+    }
   }, []);
 
   const filteredStudents = students.filter((s) => {
@@ -63,11 +72,28 @@ function StudentList() {
     e.preventDefault();
 
     if (login.username === "admin" && login.password === "1234") {
-      setShowTotal(true);
+
+      localStorage.setItem("admin", "true");
+
+      setIsAdmin(true);
       setShowLogin(false);
-      toast.success("Login successful...");
+
+      toast.success("Login successful");
+
+      if (actionType === "add") {
+        setShowForm(true);
+      }
+
+      if (actionType === "edit") {
+        handleEdit(selectedStudent);
+      }
+
+      if (actionType === "delete") {
+        deleteStudent(selectedStudent._id);
+      }
+
     } else {
-      toast.error("Wrong Credentials... ");
+      toast.error("Wrong Credentials");
     }
   };
 
@@ -76,12 +102,31 @@ function StudentList() {
 
       {/* Add Student Button */}
       <button
-        onClick={() => setShowForm(!showForm)}
+        onClick={() => {
+          if (!isAdmin) {
+            setActionType("add");
+            setShowLogin(true);
+            return;
+          }
+
+          setShowForm(!showForm);
+        }}
         className="btn btn-primary mb-4"
       >
         Add Student
       </button>
-
+      {isAdmin && (
+        <button
+          onClick={() => {
+            localStorage.removeItem("admin");
+            setIsAdmin(false);
+            toast.success("Logged out");
+          }}
+          className="btn btn-error ml-2"
+        >
+          Logout
+        </button>
+      )}
       <input
         type="text"
         placeholder="Search by Roll No..."
@@ -171,11 +216,29 @@ function StudentList() {
 
                   <td className="flex gap-2">
                     <button
-                      onClick={() => handleEdit(s)}
+                      onClick={() => {
+                        if (!isAdmin) {
+                          setActionType("edit");
+                          setSelectedStudent(s);
+                          setShowLogin(true);
+                          return;
+                        }
+
+                        handleEdit(s);
+                      }}
                       className="btn btn-primary">Edit</button>
 
                     <button
-                      onClick={() => deleteStudent(s._id)}
+                      onClick={() => {
+                        if (!isAdmin) {
+                          setActionType("delete");
+                          setSelectedStudent(s);
+                          setShowLogin(true);
+                          return;
+                        }
+
+                        deleteStudent(s._id);
+                      }}
                       className="btn btn-sm btn-error"
                     >
                       Delete
@@ -187,42 +250,54 @@ function StudentList() {
           </tbody>
         </table>
       </div>
-      <button
-        className="btn btn-primary mt-4"
-        onClick={() => setShowLogin(!showLogin)}
-      >
-        Total Amount Collected
-      </button>
+
       {showLogin && (
-        <form onSubmit={handleLogin} className="mt-3 bg-white p-3 w-72">
-          <input
-            placeholder="Username"
-            className="input input-bordered w-full mb-2"
-            onChange={(e) =>
-              setLogin({ ...login, username: e.target.value })
-            }
-          />
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="input input-bordered w-full mb-2"
-            onChange={(e) =>
-              setLogin({ ...login, password: e.target.value })
-            }
-          />
+          <form
+            onSubmit={handleLogin}
+            className="bg-zinc-900 p-6 rounded-2xl w-[350px] shadow-xl"
+          >
 
-          <button className="btn btn-success w-full">
-            Login
-          </button>
-        </form>
-      )}
-      {showTotal && (
-        <div className="mt-3 p-3 bg-white-100 font-bold">
-          Total Collected Amount: ₹ {totalCollected}
+            <h2 className="text-2xl font-bold text-white mb-5 text-center">
+              Admin Login
+            </h2>
+
+            <input
+              placeholder="Username"
+              className="input input-bordered w-full mb-3"
+              onChange={(e) =>
+                setLogin({ ...login, username: e.target.value })
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              className="input input-bordered w-full mb-4"
+              onChange={(e) =>
+                setLogin({ ...login, password: e.target.value })
+              }
+            />
+
+            <button className="btn btn-success w-full mb-2">
+              Login
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowLogin(false)}
+              className="btn btn-error w-full"
+            >
+              Cancel
+            </button>
+
+          </form>
         </div>
       )}
-
+      <div className="mt-4 font-bold">
+        Total Collected Amount: ₹ {totalCollected}
+      </div>
     </div>
   );
 }
