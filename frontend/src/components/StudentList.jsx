@@ -111,7 +111,7 @@ function StudentList() {
 
           setShowForm(!showForm);
         }}
-        className="btn btn-primary mb-4"
+        className="btn btn-primary"
       >
         Add Student
       </button>
@@ -122,7 +122,7 @@ function StudentList() {
             setIsAdmin(false);
             toast.success("Logged out");
           }}
-          className="btn btn-error ml-3 mt-[2px]"
+          className="btn btn-error"
         >
           Logout
         </button>
