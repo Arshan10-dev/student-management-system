@@ -33,7 +33,7 @@ function AddStudent({ refreshStudents }) {
 
   try {
     await axios.post(
-      `https://student-management-system-1-1j2r.onrender.com/api/students`,
+      `https://student-management-system-v7q0.onrender.com/api/students`,
       {
         ...form,
         pendingAmount: pending,

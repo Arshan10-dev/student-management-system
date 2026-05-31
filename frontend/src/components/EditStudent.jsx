@@ -26,7 +26,7 @@ function EditStudent({ refreshStudents, editStudent, closeForm }) {
 
     try {
       await axios.put(
-        `https://student-management-system-1-1j2r.onrender.com/api/students/${editStudent._id}`,
+        `https://student-management-system-v7q0.onrender.com/api/students/${editStudent._id}`,
         {
           ...form,
           pendingAmount: pending,
