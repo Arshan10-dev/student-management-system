@@ -19,8 +19,6 @@ function App() {
       </h1>
 
       <StudentList />
-
-      <Toaster position="top-right" />
     </div>
   );
 }
