@@ -7,6 +7,7 @@ import EditStudent from "./EditStudent";
 function StudentList() {
   const [searchRoll, setSearchRoll] = useState("");
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const totalCollected = students.reduce(
     (sum, s) => sum + Number(s.paidAmount || 0),
     0
@@ -29,12 +30,17 @@ function StudentList() {
   const fetchStudents = async () => {
 
     try {
-      const res = await axios.get("https://student-management-system-v7q0.onrender.com/api/students"
+      setLoading(true);
+      const res = await axios.get(
+        "https://student-management-system-v7q0.onrender.com/api/students"
       );
       console.log("API DATA:", res.data);
       setStudents(res.data);
     } catch (err) {
       console.log("API ERROR:", err);
+      toast.error("Unable to connect to server");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,52 +102,53 @@ function StudentList() {
       toast.error("Wrong Credentials");
     }
   };
-
   return (
     <div className="max-w-[1700px] mx-auto p-5">
+      <div className="flex flex-wrap items-center gap-4 mb-6 bg-base-100 p-4 rounded-xl shadow">
 
-      <button
-        onClick={() => {
-          if (!isAdmin) {
-            setActionType("add");
-            setShowLogin(true);
-            return;
-          }
-
-          setShowForm(!showForm);
-        }}
-        className="btn btn-primary"
-      >
-        Add Student
-      </button>
-
-      {isAdmin && (
         <button
           onClick={() => {
-            localStorage.removeItem("admin");
-            setIsAdmin(false);
-            toast.success("Logged out");
+            if (!isAdmin) {
+              setActionType("add");
+              setShowLogin(true);
+              return;
+            }
+
+            setShowForm(!showForm);
           }}
-          className="btn btn-error"
+          className="btn btn-primary"
         >
-          Logout
+          Add Student
         </button>
-      )}
 
-      <input
-        type="text"
-        placeholder="Search by Roll No..."
-        value={searchRoll}
-        onChange={(e) => setSearchRoll(e.target.value)}
-        className="input input-bordered w-[320px]"
-      />
+        {isAdmin && (
+          <button
+            onClick={() => {
+              localStorage.removeItem("admin");
+              setIsAdmin(false);
+              toast.success("Logged out");
+            }}
+            className="btn btn-error"
+          >
+            Logout
+          </button>
+        )}
 
-      <button
-        onClick={() => setShowFilter(!showFilter)}
-        className="btn btn-secondary"
-      >
-        Filter
-      </button>
+        <input
+          type="text"
+          placeholder="Search by Roll No..."
+          value={searchRoll}
+          onChange={(e) => setSearchRoll(e.target.value)}
+          className="input input-bordered w-[320px]"
+        />
+
+        <button
+          onClick={() => setShowFilter(!showFilter)}
+          className="btn btn-secondary"
+        >
+          Filter
+        </button>
+      </div>
       {showFilter && (
         <div className="flex gap-2 mb-3">
           <button
@@ -200,10 +207,30 @@ function StudentList() {
             </tr>
           </thead>
           <tbody>
-            {students.length === 0 ? (
+
+            {loading ? (
+
               <tr>
-                <td colSpan="7">No students found</td>
+                <td colSpan="8" className="text-center py-10">
+                  <div className="flex flex-col items-center gap-3">
+
+                    <span className="loading loading-spinner loading-lg"></span>
+
+                    <span className="font-medium">
+                      Connecting to server...
+                    </span>
+
+                  </div>
+                </td>
               </tr>
+            ) : filteredStudents.length === 0 ? (
+
+              <tr>
+                <td colSpan="8" className="text-center py-8">
+                  No students found
+                </td>
+              </tr>
+
             ) : (
               filteredStudents.map((s) => (
 
@@ -297,9 +324,11 @@ function StudentList() {
           </form>
         </div>
       )}
-      <div className="mt-4 font-bold">
-        Total Collected Amount: ₹ {totalCollected}
-      </div>
+      {!loading && (
+        <div className="mt-4 font-bold">
+          Total Collected Amount: ₹ {totalCollected}
+        </div>
+      )}
     </div>
   );
 }
